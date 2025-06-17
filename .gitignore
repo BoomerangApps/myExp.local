@@ -1,0 +1,36 @@
+# Gradle files
+.gradle
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log files
+*.log
+
+# Android Studio generated files
+.idea/
+*.iml
+.cxx/
+
+# APK files
+*.apk
+*.aab
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google services file
+google-services.json
+
+# Misc
+.DS_Store
+captures/
+.externalNativeBuild/
+
+# Generated class files
+*.class
+
+# Proguard output files
+**/proguard/

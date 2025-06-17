@@ -1,0 +1,3 @@
+-keep class com.expense.smsextractor.** { *; }
+-keep class androidx.room.** { *; }
+-keep class com.google.android.material.** { *; }
