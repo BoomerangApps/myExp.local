@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myExp.local Feature Graphic</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .graphic-container {
+            width: 1024px; /* Standard feature graphic width */
+            height: 500px; /* Standard feature graphic height */
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem; /* Rounded corners for the graphic itself */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%); /* Green gradient background */
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 2rem;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .text-section {
+            flex: 1;
+            padding-right: 2rem;
+            text-align: left;
+        }
+        .mockup-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .phone-mockup {
+            width: 250px;
+            height: 480px; /* Adjusted height for visual balance */
+            background-color: #1a202c; /* Dark screen background */
+            border-radius: 2rem;
+            border: 8px solid #2d3748;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Align content to the top */
+            align-items: center;
+            padding: 1rem;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.3);
+            transform: rotateY(-15deg) rotateX(10deg); /* Slight 3D tilt */
+            transition: transform 0.3s ease-in-out;
+        }
+        .phone-mockup:hover {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+        .screen-content {
+            width: calc(100% - 2rem);
+            height: calc(100% - 2rem);
+            background-color: #2d3748; /* Inner screen background */
+            border-radius: 1rem;
+            overflow: hidden;
+            padding: 0.5rem;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+        }
+        .icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+        .sms-icon { fill: #fcd34d; } /* Yellow for SMS */
+        .dollar-icon { fill: #38a169; } /* Darker green for money */
+        .list-icon { fill: #cbd5e0; } /* Light grey for list */
+        .refresh-icon { fill: #63b3ed; } /* Blue for refresh */
+        .search-icon { fill: #9f7aea; } /* Purple for search */
+
+        /* Mockup content styling */
+        .mockup-header {
+            font-weight: bold;
+            color: #a0aec0;
+            margin-bottom: 0.5rem;
+        }
+        .mockup-item {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background-color: #4a5568;
+            padding: 0.3rem 0.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.2rem;
+        }
+        .mockup-sms-line {
+            background-color: #fcd34d;
+            color: #1a202c;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.4rem;
+            align-self: flex-end;
+            max-width: 80%;
+        }
+        .mockup-expense-line {
+            background-color: #66BB6A;
+            color: white;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.75rem;
+            margin-top: 0.4rem;
+            align-self: flex-start;
+            max-width: 80%;
+        }
+        .sms-bubble {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: #fcd34d; /* Yellow for SMS bubble */
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: bounce 2s infinite ease-in-out;
+            z-index: 10;
+        }
+        .list-bubble {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: #a0aec0; /* Grey for list bubble */
+            border-radius: 50%;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: bounce 2s infinite ease-in-out 0.5s;
+            z-index: 10;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="graphic-container">
+        <!-- Text and Slogan Section -->
+        <div class="text-section">
+            <h1 class="text-6xl font-bold mb-4">myExp.local</h1>
+            <p class="text-2xl mb-6">Effortless Expense Tracking from SMS</p>
+            <ul class="text-xl space-y-3">
+                <li class="flex items-center">
+                    <svg class="icon sms-icon" viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                    Scan SMS for Instant Expense Drafts
+                </li>
+                <li class="flex items-center">
+                    <svg class="icon list-icon" viewBox="0 0 24 24">
+                        <path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z"/>
+                    </svg>
+                    Organize & Manage Expenses in Dedicated Tabs
+                </li>
+                <li class="flex items-center">
+                    <svg class="icon refresh-icon" viewBox="0 0 24 24">
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.76 0 3.3.73 4.46 1.94L14 12h7V5l-3.35 1.35z"/>
+                    </svg>
+                    <svg class="icon search-icon" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                    Quick Refresh & Powerful Search
+                </li>
+            </ul>
+        </div>
+
+        <!-- Mockup Section -->
+        <div class="mockup-section">
+            <div class="sms-bubble">
+                <svg class="icon w-8 h-8" viewBox="0 0 24 24">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                </svg>
+            </div>
+            <div class="list-bubble">
+                 <svg class="icon w-8 h-8" viewBox="0 0 24 24">
+                    <path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z"/>
+                </svg>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen-content">
+                    <div class="mockup-sms-line">
+                        SMS: "Debit of 500 for Groceries"
+                    </div>
+                    <div class="mockup-expense-line">
+                        Draft: Groceries - ₹500
+                    </div>
+                    <div class="mockup-item">
+                        <span>Rent</span> <span>₹15,000</span>
+                    </div>
+                    <div class="mockup-item">
+                        <span>Food</span> <span>₹2,500</span>
+                    </div>
+                    <div class="mockup-item">
+                        <span>Transport</span> <span>₹800</span>
+                    </div>
+                    <div class="mockup-item">
+                        <span>Utilities</span> <span>₹1,200</span>
+                    </div>
+                    <div class="mockup-header mt-2">New Entry Pending:</div>
+                    <div class="mockup-item bg-blue-700">
+                        <span>New Expense</span> <span>₹500</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

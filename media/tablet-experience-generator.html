@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablet Image Resizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align items to the top to make room for input */
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px; /* Limit overall width */
+            background-color: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .display-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .display-section {
+                flex-direction: row;
+                justify-content: space-around;
+            }
+        }
+        .tablet-frame {
+            background-color: #e0e0e0;
+            border: 8px solid #333;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            flex-shrink: 0; /* Prevent shrinking when space is limited */
+        }
+        .tablet-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ensure image fits within the frame */
+            border-radius: 8px; /* Slightly rounded corners for the image inside */
+        }
+        .tablet-frame p {
+            color: #666;
+            font-size: 1rem;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Responsive dimensions for tablet frames */
+        .tablet-7inch {
+            /* Approximating 7-inch (1280x800) aspect ratio */
+            width: 90%; /* Responsive width */
+            max-width: 320px; /* Max width for 7-inch frame */
+            padding-top: calc(320px * (800 / 1280)); /* Maintain aspect ratio (height = width * (800/1280)) */
+        }
+        .tablet-10inch {
+            /* Approximating 10-inch (1920x1200) aspect ratio */
+            width: 90%; /* Responsive width */
+            max-width: 450px; /* Max width for 10-inch frame */
+            padding-top: calc(450px * (1200 / 1920)); /* Maintain aspect ratio (height = width * (1200/1920)) */
+        }
+        .tablet-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4 text-center">Tablet Image Previewer</h1>
+
+        <div class="input-section">
+            <label for="imageUrl" class="block text-gray-700 text-sm font-semibold mb-2">Enter Image URL:</label>
+            <input type="url" id="imageUrl" placeholder="e.g., https://placehold.co/600x400/000000/FFFFFF?text=Your+Image"
+                   class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full mb-2">
+            <button id="loadImageBtn"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                Load Image
+            </button>
+        </div>
+
+        <div class="display-section">
+            <!-- 7-inch Tablet Display -->
+            <div class="tablet-frame tablet-7inch">
+                <div class="tablet-content">
+                    <img id="image7inch"
+                         src="https://placehold.co/1280x800/A0A0A0/FFFFFF?text=7-inch+Tablet"
+                         alt="7-inch Tablet Display"
+                         onerror="this.onerror=null; this.src='https://placehold.co/1280x800/CCCCCC/666666?text=Image+Load+Error';">
+                </div>
+            </div>
+
+            <!-- 10-inch Tablet Display -->
+            <div class="tablet-frame tablet-10inch">
+                <div class="tablet-content">
+                    <img id="image10inch"
+                         src="https://placehold.co/1920x1200/B0B0B0/FFFFFF?text=10-inch+Tablet"
+                         alt="10-inch Tablet Display"
+                         onerror="this.onerror=null; this.src='https://placehold.co/1920x1200/CCCCCC/666666?text=Image+Load+Error';">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const imageUrlInput = document.getElementById('imageUrl');
+            const loadImageBtn = document.getElementById('loadImageBtn');
+            const image7inch = document.getElementById('image7inch');
+            const image10inch = document.getElementById('image10inch');
+
+            // Function to update images
+            const updateImages = () => {
+                const url = imageUrlInput.value.trim();
+                if (url) {
+                    image7inch.src = url;
+                    image10inch.src = url;
+                } else {
+                    // Reset to default placeholders if URL is empty
+                    image7inch.src = "https://placehold.co/1280x800/A0A0A0/FFFFFF?text=7-inch+Tablet";
+                    image10inch.src = "https://placehold.co/1920x1200/B0B0B0/FFFFFF?text=10-inch+Tablet";
+                }
+            };
+
+            // Event listener for the button
+            loadImageBtn.addEventListener('click', updateImages);
+
+            // Event listener for 'Enter' key in the input field
+            imageUrlInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    updateImages();
+                }
+            });
+
+            // Initial load (optional, could pre-fill with a default image)
+            // imageUrlInput.value = "https://example.com/your-image.jpg"; // You can set a default URL here
+            // updateImages(); // Call to load default image on startup
+        });
+    </script>
+</body>
+</html>
