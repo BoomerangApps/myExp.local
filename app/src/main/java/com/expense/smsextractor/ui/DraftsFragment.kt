@@ -37,9 +37,13 @@ class DraftsFragment : Fragment() {
         val viewModelFactory = ExpenseViewModelFactory(database)
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[ExpenseViewModel::class.java]
 
-        val expenseAdapter = ExpenseAdapter(isDraft = true) { expenseId ->
-            viewModel.addExpense(expenseId)
-        }
+        val expenseAdapter = ExpenseAdapter(
+            isDraft = true,
+            onAddClick = { expenseId ->
+                viewModel.addExpense(expenseId)
+            },
+            onSendBackClick = {}
+        )
 
         binding.draftsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)

@@ -12,6 +12,12 @@ interface ExpenseDao {
     @Query("SELECT * FROM expenses WHERE isDraft = 0 ORDER BY timestamp DESC")
     fun getAddedExpenses(): PagingSource<Int, ExpenseEntity>
 
+    @Query("SELECT DISTINCT strftime('%Y', date) as year, strftime('%m', date) as month, strftime('%B', date) as monthName FROM expenses WHERE isDraft = 0 ORDER BY year DESC, month DESC")
+    fun getUniqueMonths(): Flow<List<MonthYear>>
+
+    @Query("SELECT * FROM expenses WHERE isDraft = 0 AND strftime('%Y', date) = :year AND strftime('%m', date) = :month ORDER BY timestamp DESC")
+    fun getExpensesByMonth(year: String, month: String): PagingSource<Int, ExpenseEntity>
+
     @Query("DELETE FROM expenses WHERE isDraft = 1")
     suspend fun clearDrafts()
 

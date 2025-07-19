@@ -11,7 +11,8 @@ import com.expense.smsextractor.databinding.ItemExpenseBinding
 
 class ExpenseAdapter(
     private val isDraft: Boolean,
-    private val onAddClick: (Long) -> Unit
+    private val onAddClick: (Long) -> Unit,
+    private val onSendBackClick: (Long) -> Unit
 ) : PagingDataAdapter<ExpenseEntity, ExpenseAdapter.ExpenseViewHolder>(ExpenseDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
@@ -26,11 +27,11 @@ class ExpenseAdapter(
             // We can show a placeholder or do nothing for now.
             return
         }
-        holder.bind(expense, isDraft, onAddClick)
+        holder.bind(expense, isDraft, onAddClick, onSendBackClick)
     }
 
     class ExpenseViewHolder(private val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(expense: ExpenseEntity, isDraft: Boolean, onAddClick: (Long) -> Unit) {
+        fun bind(expense: ExpenseEntity, isDraft: Boolean, onAddClick: (Long) -> Unit, onSendBackClick: (Long) -> Unit) {
             binding.amountText.text = "₹${expense.amount}"
             binding.descriptionText.text = expense.description
             binding.dateText.text = expense.date
@@ -42,7 +43,11 @@ class ExpenseAdapter(
                     onAddClick(expense.id)
                 }
             } else {
-                binding.addButton.visibility = View.GONE
+                binding.addButton.visibility = View.VISIBLE
+                binding.addButton.text = "Send Back"
+                binding.addButton.setOnClickListener {
+                    onSendBackClick(expense.id)
+                }
             }
         }
     }
