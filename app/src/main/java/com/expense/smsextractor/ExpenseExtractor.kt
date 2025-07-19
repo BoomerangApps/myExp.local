@@ -18,9 +18,16 @@ class ExpenseExtractor {
     companion object {
         private const val TAG = "ExpenseExtractorLog"
         private val expensePatterns = listOf(
-            "(?:Rs|INR)\\s*(\\d{1,3}(?:,\\d{3})*(?:\\.\\d+)?|\\d+(?:\\.\\d+)?)",
-            "₹\\s*(\\d+(?:\\.\\d+)?)",
-            "\\$(\\d+(?:\\.\\d+)?)"
+            // Matches: INR 8000.00 or Rs. 8000.00 or ₹8000.00
+            "(?:INR|Rs\\.?|Rs|₹)\\s*([0-9,]+(?:\\.[0-9]{1,2})?)",
+            // Matches: 8000.00 INR or 8000.00 Rs. or 8000.00₹
+            "([0-9,]+(?:\\.[0-9]{1,2})?)\\s*(?:INR|Rs\\.?|Rs|₹)",
+            // Matches: $8000.00
+            "\\$([0-9,]+(?:\\.[0-9]{1,2})?)",
+            // Matches BHIM UPI format: Txn Rs.35.00
+            "Txn\\s+(?:Rs\\.?|INR|₹)\\s*([0-9,]+(?:\\.[0-9]{1,2})?)",
+            // Matches: Amt Rs.35.00 or Amt: Rs.35.00
+            "Amt[\\s:]*?(?:Rs\\.?|INR|₹)\\s*([0-9,]+(?:\\.[0-9]{1,2})?)"
         )
 
         private val otpKeywords = listOf(
@@ -104,10 +111,43 @@ class ExpenseExtractor {
         }
 
         private fun extractDescription(message: String): String {
+            // First extract merchant/recipient information if available
+            val merchantPatterns = listOf(
+                "At\\s+([^\n]+)",  // Matches "At swiggyupi@axb" or "At paytmqr..."
+                "to\\s+([^\n]+)",   // Matches "to VENDOR NAME"
+                "for\\s+([^\n]+)"  // Matches "for VENDOR NAME"
+            )
+
+            // Try to find merchant/recipient information
+            for (pattern in merchantPatterns) {
+                val match = Regex(pattern, RegexOption.IGNORE_CASE).find(message)
+                if (match != null) {
+                    return match.groupValues[1].trim()
+                }
+            }
+
+            // Fallback to removing amount and common patterns to get description
             var description = message
+            
+            // Remove amount patterns
             expensePatterns.forEach { pattern ->
                 description = description.replace(Regex(pattern, RegexOption.IGNORE_CASE), "")
             }
+            
+            // Remove common UPI patterns
+            val upiPatterns = listOf(
+                "Txn\\s+Rs\\.?\\s*[0-9,.]+\\s*",
+                "On\\s+[A-Za-z]+\\s+Bank\\s+Card\\s+[0-9Xx]+",
+                "by\\s+UPI\\s+[0-9]+",
+                "On\\s+[0-9-]+",
+                "Not\\s+You\\?.*$",
+                "Call\\s+[0-9]+.*$"
+            )
+            
+            upiPatterns.forEach { pattern ->
+                description = description.replace(Regex(pattern, RegexOption.IGNORE_CASE), "")
+            }
+            
             return description.trim()
         }
     }
