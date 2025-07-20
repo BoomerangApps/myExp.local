@@ -13,5 +13,6 @@ data class ExpenseEntity(
     val date: String,
     val timestamp: Long,
     val sender: String,
-    val isDraft: Boolean = true
+    val isDraft: Boolean = true,
+    val originalSms: String = ""
 )

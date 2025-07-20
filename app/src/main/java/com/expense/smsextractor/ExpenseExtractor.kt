@@ -11,7 +11,8 @@ data class Expense(
     val description: String,
     val date: String,
     val timestamp: Long,
-    val sender: String
+    val sender: String,
+    val originalSms: String
 )
 
 class ExpenseExtractor {
@@ -80,7 +81,8 @@ class ExpenseExtractor {
                         description = description,
                         date = formattedDate,
                         timestamp = expenseDate.time,
-                        sender = sender
+                        sender = sender,
+                        originalSms = body
                     )
 
                     val messageKey = "${expense.amount}${expense.description}${expense.date}"

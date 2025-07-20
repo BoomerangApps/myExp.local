@@ -42,6 +42,7 @@ class AddedFragment : Fragment() {
 
         val expenseAdapter = ExpenseAdapter(
             isDraft = false,
+            fragmentManager = childFragmentManager,
             onAddClick = {},
             onSendBackClick = { expenseId ->
                 viewModel.sendBackToDraft(expenseId)

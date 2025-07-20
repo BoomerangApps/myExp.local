@@ -99,7 +99,8 @@ class ExpenseViewModel(private val database: AppDatabase) : ViewModel() {
                             date = it.date,
                             timestamp = it.timestamp,
                             sender = it.sender,
-                            isDraft = true
+                            isDraft = true,
+                            originalSms = it.originalSms
                         )
                     }.toTypedArray()
 

@@ -3,14 +3,17 @@ package com.expense.smsextractor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.expense.smsextractor.data.ExpenseEntity
 import com.expense.smsextractor.databinding.ItemExpenseBinding
+import com.expense.smsextractor.ui.SmsContentDialog
 
 class ExpenseAdapter(
     private val isDraft: Boolean,
+    private val fragmentManager: FragmentManager,
     private val onAddClick: (Long) -> Unit,
     private val onSendBackClick: (Long) -> Unit
 ) : PagingDataAdapter<ExpenseEntity, ExpenseAdapter.ExpenseViewHolder>(ExpenseDiffCallback()) {
@@ -30,8 +33,14 @@ class ExpenseAdapter(
         holder.bind(expense, isDraft, onAddClick, onSendBackClick)
     }
 
-    class ExpenseViewHolder(private val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ExpenseViewHolder(private val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(expense: ExpenseEntity, isDraft: Boolean, onAddClick: (Long) -> Unit, onSendBackClick: (Long) -> Unit) {
+            // Set click listener on the entire item view
+            itemView.setOnClickListener {
+                // Show SMS content in a dialog
+                SmsContentDialog.newInstance(expense.originalSms)
+                    .show(fragmentManager, "SmsContentDialog")
+            }
             binding.amountText.text = "₹${expense.amount}"
             binding.descriptionText.text = expense.description
             binding.dateText.text = expense.date

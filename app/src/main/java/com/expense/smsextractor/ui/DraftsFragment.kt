@@ -39,6 +39,7 @@ class DraftsFragment : Fragment() {
 
         val expenseAdapter = ExpenseAdapter(
             isDraft = true,
+            fragmentManager = childFragmentManager,
             onAddClick = { expenseId ->
                 viewModel.addExpense(expenseId)
             },
